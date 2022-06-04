@@ -16,22 +16,22 @@
   <meta name="author" content="John Doe">
   <meta name="keywords" content="">
   
-    <meta name="description" content="此作品為2021未來科技獎競賽  系統簡介姿態感測器組成一套人體姿態量測系統，利用演算法進行角度融合運算。 透過Wi-Fi將資料傳輸到電腦端進行所有感測器的整合與姿態計算，以CNN+LSTM模型訓練九軸資料，並於測試端進行即時動作識別，再將所判斷的動作指令透過藍芽傳輸與機器人作溝通，命令機器人作出相對應的動作。 受試者穿戴VR裝置，並安裝360鏡頭於機器人身上，使受試者與機器人有相同的視野，能夠">
+    <meta name="description" content="使用者將會透過VR眼鏡看到機器人360環景影像，透過姿態動作的變化，姿態動作感測訊號將透過WIFI送至雲端進行深度學習模型識別。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="結合虛擬實境與慣性姿態感測器之防疫機器代理人">
 <meta property="og:url" content="http://example.com/2022/06/03/future-tech/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="此作品為2021未來科技獎競賽  系統簡介姿態感測器組成一套人體姿態量測系統，利用演算法進行角度融合運算。 透過Wi-Fi將資料傳輸到電腦端進行所有感測器的整合與姿態計算，以CNN+LSTM模型訓練九軸資料，並於測試端進行即時動作識別，再將所判斷的動作指令透過藍芽傳輸與機器人作溝通，命令機器人作出相對應的動作。 受試者穿戴VR裝置，並安裝360鏡頭於機器人身上，使受試者與機器人有相同的視野，能夠">
+<meta property="og:description" content="使用者將會透過VR眼鏡看到機器人360環景影像，透過姿態動作的變化，姿態動作感測訊號將透過WIFI送至雲端進行深度學習模型識別。">
 <meta property="og:locale" content="zh_TW">
-<meta property="og:image" content="http://example.com/2022/06/03/future-tech/image-20220603234742622.png">
-<meta property="article:published_time" content="2022-06-03T13:57:14.000Z">
-<meta property="article:modified_time" content="2022-06-03T15:47:48.256Z">
+<meta property="og:image" content="http://example.com/img/future_tech.png">
+<meta property="article:published_time" content="2022-06-03T13:57:14.911Z">
+<meta property="article:modified_time" content="2022-06-04T12:59:38.371Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="慣性感測器">
-<meta property="article:tag" content="競賽">
 <meta property="article:tag" content="機器人">
+<meta property="article:tag" content="2021未來科技獎">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://example.com/2022/06/03/future-tech/image-20220603234742622.png">
+<meta name="twitter:image" content="http://example.com/img/future_tech.png">
   
   
   
@@ -192,7 +192,7 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+     style="background: url('/img/IMG_7802.png') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
@@ -252,14 +252,42 @@
             <div class="markdown-body">
               
               <blockquote>
-<p>此作品為2021未來科技獎競賽</p>
+<p>此作品<strong>2021未來科技獎競賽獲獎</strong></p>
 </blockquote>
-<h1 id="系統簡介"><a href="#系統簡介" class="headerlink" title="系統簡介"></a>系統簡介</h1><p>姿態感測器組成一套人體姿態量測系統，利用演算法進行角度融合運算。</p>
-<p>透過Wi-Fi將資料傳輸到電腦端進行所有感測器的整合與姿態計算，以CNN+LSTM模型訓練九軸資料，並於測試端進行即時動作識別，再將所判斷的動作指令透過藍芽傳輸與機器人作溝通，命令機器人作出相對應的動作。</p>
-<p>受試者穿戴VR裝置，並安裝360鏡頭於機器人身上，使受試者與機器人有相同的視野，能夠顯得更加臨場感。</p>
-<span id="more"></span>
+<h1 id="系統簡介"><a href="#系統簡介" class="headerlink" title="系統簡介"></a>系統簡介</h1><p>使用者將會透過VR眼鏡看到機器人360環景影像，接著使用者姿態動作改變時，其姿態動作感測訊號將透過WIFI送至雲端進行深度學習模型辨識。當模型辨識到使用者之動作時，將驅動機器人進行相同的動作。</p>
+<!-- more -->
 
-<h1 id="系統架構"><a href="#系統架構" class="headerlink" title="系統架構"></a>系統架構</h1><p><img src="/2022/06/03/future-tech/image-20220603234742622.png" srcset="/img/loading.gif" lazyload alt="image-20220603234742622"></p>
+<h1 id="系統架構"><a href="#系統架構" class="headerlink" title="系統架構"></a>系統架構</h1><ol>
+<li>受試者穿戴VR裝置，並安裝360鏡頭於機器人身上，使受試者與機器人有相同的視野，能夠顯得更加臨場感。</li>
+<li>姿態感測器組成一套人體姿態量測系統，利用演算法進行角度融合運算，透過Wi-Fi將資料傳輸到電腦端進行所有感測器的整合與姿態計算。</li>
+<li>以CNN+LSTM模型訓練九軸資料，並於測試端進行即時動作識別，再將所判斷的動作指令透過藍芽傳輸與機器人作溝通，命令機器人作出相對應的動作。</li>
+</ol>
+<p><img src="/2022/06/03/future-tech/image-20220603234742622.png" srcset="/img/loading.gif" lazyload alt="系統架構圖"></p>
+<h2 id="使用設備"><a href="#使用設備" class="headerlink" title="使用設備"></a>使用設備</h2><h3 id="設備總覽"><a href="#設備總覽" class="headerlink" title="設備總覽"></a>設備總覽</h3><div class="group-image-container"><div class="group-image-row"><div class="group-image-wrap"><img src="/2022/06/03/future-tech/image-20220604031854938.png" srcset="/img/loading.gif" lazyload alt="使用設備" style="zoom: 50%;"></div></div></div>
+
+<h3 id="慣性感測器模組"><a href="#慣性感測器模組" class="headerlink" title="慣性感測器模組"></a>慣性感測器模組</h3><p>自行開發的慣性感測器，慣性感測單元具有九軸加速規的高感度設計，內含三軸陀螺儀、加速度計及磁力計，角度探測精度可以小於0.1度。</p>
+<p>Wifi傳輸模組，可以輕鬆地將串列設備連接至網路，透過UART與微控制器溝通。微處理器用來控制周遭的電路。</p>
+<img src="/2022/06/03/future-tech/image-20220604032002448.png" srcset="/img/loading.gif" lazyload alt="慣性感測器硬體系統" style="zoom: 67%;">
+
+<h3 id="VR-amp-360相機"><a href="#VR-amp-360相機" class="headerlink" title="VR&amp;360相機"></a>VR&amp;360相機</h3><p>360相機為theta v，擁有360度全景直播功能，透過直播網路串流將影像投射到Unity球體上，再將VR視角置於球體正中心，戴上VR眼鏡後，即可如身歷其境般看到機器人的360視角</p>
+<img src="/2022/06/03/future-tech/image-20220604033232448.png" srcset="/img/loading.gif" lazyload alt="VR&360相機" style="zoom:67%;">
+
+<h2 id="模型架構"><a href="#模型架構" class="headerlink" title="模型架構"></a>模型架構</h2><p>因考慮到機器人控制之即時性，姿態感測訊號訓練資料時間範圍為動作開始時間點後0.1秒，訓練Deep Conv-LSTM 模型，進行動作姿態辨識。</p>
+<p>受試者皆可以有效完成六種指定之動作，包括左手抬起、右手抬起、雙手抬起、前進、左轉以及右轉之動作，並且可在各種環境下皆可進行使用，不易受到外界雜訊干擾。</p>
+<img src="/2022/06/03/future-tech/image-20220604030119199.png" srcset="/img/loading.gif" lazyload alt="AI模型架構" style="zoom: 50%;">
+
+<h2 id="動作識別"><a href="#動作識別" class="headerlink" title="動作識別"></a>動作識別</h2><p>使用者執行動作時，姿態慣性感測訊號送至深度學習模型進行判別，並根據其判別結果，送出動作指令給機器人，使機器人做出相對應之動作。</p>
+<p><img src="/2022/06/03/future-tech/image-20220604030503219.png" srcset="/img/loading.gif" lazyload></p>
+<h1 id="實體展示"><a href="#實體展示" class="headerlink" title="實體展示"></a>實體展示</h1><p>競賽獲獎後，於台北世貿實體展示，並開放觀眾參觀與詢問問題。</p>
+<p>向學生展示與介紹我們的系統，開放參觀者親自體驗我們的系統</p>
+<div class="group-image-container"><div class="group-image-row"><div class="group-image-wrap"><img src="/2022/06/03/future-tech/IMG_7708.png" srcset="/img/loading.gif" lazyload alt="IMG_7708" style="zoom: 25%;"></div></div><div class="group-image-row"><div class="group-image-wrap"><img src="/2022/06/03/future-tech/IMG_7704.png" srcset="/img/loading.gif" lazyload alt="IMG_7704" style="zoom: 25%;"></div></div></div>
+
+<p><strong>此作品榮獲未來科技獎</strong></p>
+<p><img src="/2022/06/03/future-tech/IMG_7743.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2022/06/03/future-tech/IMG_7802.png" srcset="/img/loading.gif" lazyload></p>
+<blockquote>
+<p>完整競賽影片 : <a target="_blank" rel="noopener" href="https://youtu.be/XFN2XDS2GfY"><em>未來科技獎</em></a> (於影片後段有demo影片)</p>
+</blockquote>
 
               
             </div>
@@ -294,9 +322,9 @@
       
         <a href="/tags/%E6%85%A3%E6%80%A7%E6%84%9F%E6%B8%AC%E5%99%A8/">#慣性感測器</a>
       
-        <a href="/tags/%E7%AB%B6%E8%B3%BD/">#競賽</a>
-      
         <a href="/tags/%E6%A9%9F%E5%99%A8%E4%BA%BA/">#機器人</a>
+      
+        <a href="/tags/2021%E6%9C%AA%E4%BE%86%E7%A7%91%E6%8A%80%E7%8D%8E/">#2021未來科技獎</a>
       
     </div>
   
