@@ -4,6 +4,49 @@
   
   
   <entry>
+    <title>應用強化學習於IMU精確動作追蹤與遠端人型機器人重定向控制</title>
+    <link href="/2022/06/05/skeleton-robot/"/>
+    <url>/2022/06/05/skeleton-robot/</url>
+    
+    <content type="html"><![CDATA[<blockquote><p>此作品為碩士論文</p></blockquote><h1 id="論文摘要"><a href="#論文摘要" class="headerlink" title="論文摘要"></a>論文摘要</h1><p>設計一套基於姿態遠端控制機器人系統，操作者配戴感測器對機器人手部姿態重定向與腿部控制，搭配語音系統使人機兩端能進行語音通訊，頭部配戴VR頭戴顯示器以獲取機器人視野，藉此將自己化身為機器人與他人進行互動。</p><h1 id="系統架構"><a href="#系統架構" class="headerlink" title="系統架構"></a>系統架構</h1><ul><li><p>操作者遠程控制系統</p><p>本研究操作者端將配戴HTC VIVE VR頭戴式顯示器以獲取機器人視野畫面與機器人頭部轉向控制，透過麥克風與喇叭與機器人端進行對話交流，人體姿態感測系統由14顆姿態感測器所組成。</p></li><li><p>人體運動捕捉系統</p><p>將人體姿態投射於Unity中，收集25個關節之三軸座標位置，並依據Kinect V2所定義之關節點作為本研究關節資料儲存形式。</p></li><li><p>機器人系統</p><p>本研究使用機器人為Nao-V6，全身配有25個自由度，主要分布於頭部、手部與足部。</p><ol><li>手部控制:  能夠透過強化學習與逆向運動學兩種模式實現。</li><li>腿部控制: 為考慮機器人安全性，腿部動作使用預設前進、側移、轉向等動作。</li><li>頭部控制: 透過虛擬實境頭盔控制機器人頭部轉向，與機器人視野追蹤。</li><li>音訊控制: 建立錄音、播音系統傳輸兩地音訊。</li></ol></li></ul><p><img src="/2022/06/05/skeleton-robot/%E7%B3%BB%E7%B5%B1%E6%9E%B6%E6%A7%8B%E5%9C%96.png" alt="系統架構圖"></p><h1 id="資料傳輸"><a href="#資料傳輸" class="headerlink" title="資料傳輸"></a>資料傳輸</h1><p>資料傳輸透過Python Socket TCP網路通訊程式實現，在傳輸系統中又分為服務端（Server）與客戶端（Client），給定IP地址、協議方式與連接埠來建立溝通。</p><p>本研究以TCP協定進行資料傳輸，由於機器人需與路由器綁定，故於此路由器建立虛擬伺服器，並設置連接埠轉發功能，客戶端與服務端集可跨域傳輸資料。</p><p><img src="/2022/06/05/skeleton-robot/TCP%E8%B3%87%E6%96%99%E5%82%B3%E8%BC%B8%E6%B5%81%E7%A8%8B.jpg" alt="TCP資料傳輸流程"></p><h1 id="系統設計"><a href="#系統設計" class="headerlink" title="系統設計"></a>系統設計</h1><p>本研究使用 <em><strong>強化學習</strong></em>  與 <em><strong>逆向運動學</strong></em>  兩方式對機器人手臂作運動重定向，並分析兩種方法之優劣。</p><h2 id="手部控制"><a href="#手部控制" class="headerlink" title="手部控制"></a>手部控制</h2><h3 id="資料前處理"><a href="#資料前處理" class="headerlink" title="資料前處理"></a>資料前處理</h3><p>Unity與機器人兩座標軸不同，建立方向餘弦(DCM)矩陣，將Unity中的骨骼資訊進行座標轉換至機器人座標軸。</p><p><img src="/2022/06/05/skeleton-robot/image-20220606135339929.png" alt="DCM matrix"></p><p><img src="/2022/06/05/skeleton-robot/%E5%9D%90%E6%A8%99%E8%BB%B8%E8%BD%89%E6%8F%9B.jpg" alt="坐標軸轉換"></p><p>座標軸轉換結果</p><p><img src="/2022/06/05/skeleton-robot/image-20220606135629470.png" alt="前處理結果"></p><h3 id="1-逆向運動學"><a href="#1-逆向運動學" class="headerlink" title="1. 逆向運動學"></a>1. 逆向運動學</h3><p>下圖為機器人左右手臂的鏈結框架。</p><p><img src="/2022/06/05/skeleton-robot/image-20220606140055204.png" alt="D-H模型 關節軸配置"></p><p>Denavit-Hartenberg參數模型(D-H模型)，將每個連桿建構座標系，以便描述當前連桿座標系與相鄰連桿座標系之間的轉換關係，下表為Nao機器人依據鏈結框架所建置之D-H模型。</p><p><img src="/2022/06/05/skeleton-robot/image-20220606142529516.png" alt="D-H參數表"></p><p>因左右手臂參數模型不同，故左右手臂有不同的逆向運動解。由於機器人與人體維度不同，需將前處理後人體向量映射至機器人向量，代入逆向運動學公式中，即可回推機器人手臂關節旋轉角，以驅動機器人手臂至目標位置，使機器人模仿人體的手部姿態。</p><p><img src="/2022/06/05/skeleton-robot/image-20220606144037070.png" alt="逆向運動學解"></p><h3 id="2-強化學習"><a href="#2-強化學習" class="headerlink" title="2. 強化學習"></a>2. 強化學習</h3><p>強化學習模型使用<em><strong>行動者評論家網路</strong></em>，為一種結合策略梯度與時序差分（Temporal difference）的強化學習方法，它使用兩個深度學習模型，分別為行動者與評論家。行動者模型學習在特定環境狀態下應該執行什麼動作，當行動者模型選擇的動作被執行後，智能體與評論家模型將從環境中獲得獎勵。評論家模型的作用為優化行動者模型，將行動者模型依據前狀態採取之動作給予評級，而智能體將基於評級比較當前策略與新策略，並決定如何改進行動者模型以採取更好的行動。</p><div class="group-image-container"><div class="group-image-row"><div class="group-image-wrap"><img src="/2022/06/05/skeleton-robot/行動者評論家演算法.jpg" alt="行動者評論家演算法" style="zoom: 67%;"></div></div></div><p>給定6個目標動作，分別為歡呼、揮手、指向、擦臉、敬禮、雙手合十，這些動作是人與人之間常有的互動動作。機器人端預先設計好這6類動作，而受試者端透過人體運動捕捉系統蒐集6類運動數據，根據人體姿態能獲得所有關節之三軸位置數據。</p><p><img src="/2022/06/05/skeleton-robot/image-20220606151145374.png" alt="6類目標動作"></p><p>行動者評論家網路以人體與機器人兩端之間的潛在向量作學習，人機兩端數據預先訓練<em><strong>變分自動編碼器網路</strong></em>（Variational Autoencoder, VAE），即可獲得兩端之間的潛在向量。</p><p><img src="/2022/06/05/skeleton-robot/skel_vae.jpg" alt="skel_vae"></p><p><img src="/2022/06/05/skeleton-robot/robot_vae.jpg" alt="robot vae"></p><ol><li><p><em><strong>行動者-評論家網路架構</strong></em>，定義智能體之學習策略，模型前饋階段經前處理之骨骼數據會進行編碼，行動者網路將接收骨骼之隱藏含量並自動生成機器人之隱藏含量。</p></li><li><p>V-REP軟體為智能體與環境的接口，將解碼後的機器人動作於模擬器中實現，模擬器將輸出機器人關節角度與位置</p></li></ol><ul><li>位置: 計算手部向量相似度作為模型獎勵機制</li><li>角度: 角度編碼後的隱藏含量與人體隱藏含量用於模型反饋階段，透過評論家網路給予評級優化行動者網路</li></ul><ol start="3"><li>智能體將比較當前策略與新策略，改進行動者網路以採取更好的行動。</li></ol><p><img src="/2022/06/05/skeleton-robot/image-20220606152926823.png" alt="行動者評論家網路架構"></p><p>模型目標成功讓智能體學習正確策略，並讓期望的折扣獎勵最大化，模型訓練完畢後人體姿態數據將透過行動者網路生成正確之機器人隱藏含量，並對隱藏含量解碼以得到正確之關節輸出角度。</p><div class="group-image-container"><div class="group-image-row"><div class="group-image-wrap"><img src="/2022/06/05/skeleton-robot/image-20220606153331716.png" style="zoom:67%;"></div></div></div><h2 id="音訊控制"><a href="#音訊控制" class="headerlink" title="音訊控制"></a>音訊控制</h2><p>語音系統由錄音系統與播放系統組成，操作者端錄音透過RMS值大小觸發，錄音系統需設定音量閥值，待RMS值大於閥值觸發錄音，由於講話換氣時RMS值會驟降，故限制RMS值小於閥值持續1秒後才中斷錄音，避免斷續錄音的問題，錄完的音檔寫入至兩端共用之雲端硬碟內。</p><p>播放系統為播放雲端硬碟中對方儲存之音檔，並持續檢查音訊檔案是否寫入完畢，寫入完畢才能進行播放動作，於兩系統加入條件讓錄音系統與播放系統能順利運行不互相衝突。</p><div class="group-image-container"><div class="group-image-row"><div class="group-image-wrap"><img src="/2022/06/05/skeleton-robot/音訊架構.jpg" alt="音訊架構"></div></div></div><p>機器人端與操作者端語音系統邏輯設計相同，機器人觸發錄音時會將全身亮起黃色LED燈，並說”start recording”，錄音結束後會將LED熄滅，並說”record over”，以提示機器人端的使用者機器人當前語音系統狀態。</p><div class="group-image-container"><div class="group-image-row"><div class="group-image-wrap"><img src="/2022/06/05/skeleton-robot/機器人端語音流程.jpg" alt="機器人端語音流程" style="zoom: 80%;"></div></div></div><h2 id="頭部控制"><a href="#頭部控制" class="headerlink" title="頭部控制"></a>頭部控制</h2><h3 id="頭部轉向"><a href="#頭部轉向" class="headerlink" title="頭部轉向"></a>頭部轉向</h3><p>將Unity與機器人座標軸對齊，並直接給定角度控制機器人頭部轉向。</p><h3 id="鏡頭輸出"><a href="#鏡頭輸出" class="headerlink" title="鏡頭輸出"></a>鏡頭輸出</h3><p>機器人鏡頭輸出有多種色彩空間與解析度供選擇，本系統將鏡頭設置為RGB色彩空間，因考慮鏡頭畫面流暢度，解析度為320*420，每秒30幀。</p><p>透過Wi-Fi連線至機器人鏡頭伺服器，電腦接收機器人視訊畫面後，取出視訊內容之像素點並進行像素點重組，設計超文字標記檔（HTML）之格式內容，將重組後之視訊內容呈現於超文字標記檔中。</p><p>視頻流可以在大多數現代瀏覽器（即Firefox、Edge、Chrome 等）中使用，輸入路由器IP與外部連接埠端口即可開啟檔案以檢視機器人視野畫面。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>碩士研究</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>慣性感測器</tag>
+      
+      <tag>人工智慧</tag>
+      
+      <tag>運動重定向</tag>
+      
+      <tag>系統設計</tag>
+      
+      <tag>Nao 機器人</tag>
+      
+      <tag>強化學習</tag>
+      
+      <tag>逆向運動學</tag>
+      
+      <tag>碩士論文</tag>
+      
+      <tag>虛擬實境</tag>
+      
+      <tag>通訊協定</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>愛文芒果不良品分類競賽</title>
     <link href="/2022/06/04/ai-mango/"/>
     <url>/2022/06/04/ai-mango/</url>
@@ -58,6 +101,8 @@
       <tag>人工智慧</tag>
       
       <tag>系統設計</tag>
+      
+      <tag>虛擬實境</tag>
       
     </tags>
     
