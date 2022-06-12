@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_TW">
 <meta property="og:image" content="http://example.com/img/%E6%A9%9F%E5%99%A8%E4%BA%BA.png">
 <meta property="article:published_time" content="2022-06-05T14:32:56.358Z">
-<meta property="article:modified_time" content="2022-06-06T07:37:03.795Z">
+<meta property="article:modified_time" content="2022-06-07T06:12:42.316Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="慣性感測器">
 <meta property="article:tag" content="人工智慧">
@@ -80,7 +80,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.1","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.1","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"left","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -134,33 +134,9 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/archives/">
-                <i class="iconfont icon-archive-fill"></i>
-                歸檔
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
               <a class="nav-link" href="/categories/">
                 <i class="iconfont icon-category-fill"></i>
                 分類
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/tags/">
-                <i class="iconfont icon-tags-fill"></i>
-                標籤
               </a>
             </li>
           
@@ -246,6 +222,16 @@
   <div class="row nomargin-x">
     <div class="side-col d-none d-lg-block col-lg-2">
       
+  <aside class="sidebar" style="padding-left: 2rem; margin-right: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目錄</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
 
     </div>
 
@@ -283,7 +269,7 @@
 <h1 id="資料傳輸"><a href="#資料傳輸" class="headerlink" title="資料傳輸"></a>資料傳輸</h1><p>資料傳輸透過Python Socket TCP網路通訊程式實現，在傳輸系統中又分為服務端（Server）與客戶端（Client），給定IP地址、協議方式與連接埠來建立溝通。</p>
 <p>本研究以TCP協定進行資料傳輸，由於機器人需與路由器綁定，故於此路由器建立虛擬伺服器，並設置連接埠轉發功能，客戶端與服務端集可跨域傳輸資料。</p>
 <p><img src="/2022/06/05/skeleton-robot/TCP%E8%B3%87%E6%96%99%E5%82%B3%E8%BC%B8%E6%B5%81%E7%A8%8B.jpg" srcset="/img/loading.gif" lazyload alt="TCP資料傳輸流程"></p>
-<h1 id="系統設計"><a href="#系統設計" class="headerlink" title="系統設計"></a>系統設計</h1><p>本研究使用 <em><strong>強化學習</strong></em>  與 <em><strong>逆向運動學</strong></em>  兩方式對機器人手臂作運動重定向，並分析兩種方法之優劣。</p>
+<h1 id="系統設計"><a href="#系統設計" class="headerlink" title="系統設計"></a>系統設計</h1><p>本研究使用 <em><strong>強化學習</strong></em>  與 <em><strong>逆向運動學</strong></em>  兩方式對機器人手臂作運動重定向，分析兩種方法之優劣。</p>
 <h2 id="手部控制"><a href="#手部控制" class="headerlink" title="手部控制"></a>手部控制</h2><h3 id="資料前處理"><a href="#資料前處理" class="headerlink" title="資料前處理"></a>資料前處理</h3><p>Unity與機器人兩座標軸不同，建立方向餘弦(DCM)矩陣，將Unity中的骨骼資訊進行座標轉換至機器人座標軸。</p>
 <p><img src="/2022/06/05/skeleton-robot/image-20220606135339929.png" srcset="/img/loading.gif" lazyload alt="DCM matrix"></p>
 <p><img src="/2022/06/05/skeleton-robot/%E5%9D%90%E6%A8%99%E8%BB%B8%E8%BD%89%E6%8F%9B.jpg" srcset="/img/loading.gif" lazyload alt="坐標軸轉換"></p>
@@ -301,8 +287,8 @@
 <p>給定6個目標動作，分別為歡呼、揮手、指向、擦臉、敬禮、雙手合十，這些動作是人與人之間常有的互動動作。機器人端預先設計好這6類動作，而受試者端透過人體運動捕捉系統蒐集6類運動數據，根據人體姿態能獲得所有關節之三軸位置數據。</p>
 <p><img src="/2022/06/05/skeleton-robot/image-20220606151145374.png" srcset="/img/loading.gif" lazyload alt="6類目標動作"></p>
 <p>行動者評論家網路以人體與機器人兩端之間的潛在向量作學習，人機兩端數據預先訓練<em><strong>變分自動編碼器網路</strong></em>（Variational Autoencoder, VAE），即可獲得兩端之間的潛在向量。</p>
-<p><img src="/2022/06/05/skeleton-robot/skel_vae.jpg" srcset="/img/loading.gif" lazyload alt="skel_vae"></p>
-<p><img src="/2022/06/05/skeleton-robot/robot_vae.jpg" srcset="/img/loading.gif" lazyload alt="robot vae"></p>
+<p><img src="/2022/06/05/skeleton-robot/skel_vae.png" srcset="/img/loading.gif" lazyload alt="skel_vae"></p>
+<p><img src="/2022/06/05/skeleton-robot/robot_vae.png" srcset="/img/loading.gif" lazyload alt="robot_vae"></p>
 <ol>
 <li><p><em><strong>行動者-評論家網路架構</strong></em>，定義智能體之學習策略，模型前饋階段經前處理之骨骼數據會進行編碼，行動者網路將接收骨骼之隱藏含量並自動生成機器人之隱藏含量。</p>
 </li>
@@ -320,6 +306,13 @@
 <p>模型目標成功讓智能體學習正確策略，並讓期望的折扣獎勵最大化，模型訓練完畢後人體姿態數據將透過行動者網路生成正確之機器人隱藏含量，並對隱藏含量解碼以得到正確之關節輸出角度。</p>
 <div class="group-image-container"><div class="group-image-row"><div class="group-image-wrap"><img src="/2022/06/05/skeleton-robot/image-20220606153331716.png" srcset="/img/loading.gif" lazyload style="zoom:67%;"></div></div></div>
 
+<h2 id="足部控制"><a href="#足部控制" class="headerlink" title="足部控制"></a>足部控制</h2><p>依照動畫中左大腿y軸旋轉角與右大腿z軸旋轉角來觸發足部行動。</p>
+<ul>
+<li>前進: 角度上升 當上升超越40度觸發</li>
+<li>側移: 角度下降 當下降超越15度觸發</li>
+<li>轉身: 將動畫面向方位與機器人面向方位對齊，當差距超過40度時，進行修正。</li>
+</ul>
+<p><img src="/2022/06/05/skeleton-robot/image-20220606213306159.png" srcset="/img/loading.gif" lazyload alt="image-20220606213306159"></p>
 <h2 id="音訊控制"><a href="#音訊控制" class="headerlink" title="音訊控制"></a>音訊控制</h2><p>語音系統由錄音系統與播放系統組成，操作者端錄音透過RMS值大小觸發，錄音系統需設定音量閥值，待RMS值大於閥值觸發錄音，由於講話換氣時RMS值會驟降，故限制RMS值小於閥值持續1秒後才中斷錄音，避免斷續錄音的問題，錄完的音檔寫入至兩端共用之雲端硬碟內。</p>
 <p>播放系統為播放雲端硬碟中對方儲存之音檔，並持續檢查音訊檔案是否寫入完畢，寫入完畢才能進行播放動作，於兩系統加入條件讓錄音系統與播放系統能順利運行不互相衝突。</p>
 <div class="group-image-container"><div class="group-image-row"><div class="group-image-wrap"><img src="/2022/06/05/skeleton-robot/音訊架構.jpg" srcset="/img/loading.gif" lazyload alt="音訊架構"></div></div></div>
@@ -331,7 +324,55 @@
 <h3 id="鏡頭輸出"><a href="#鏡頭輸出" class="headerlink" title="鏡頭輸出"></a>鏡頭輸出</h3><p>機器人鏡頭輸出有多種色彩空間與解析度供選擇，本系統將鏡頭設置為RGB色彩空間，因考慮鏡頭畫面流暢度，解析度為320*420，每秒30幀。</p>
 <p>透過Wi-Fi連線至機器人鏡頭伺服器，電腦接收機器人視訊畫面後，取出視訊內容之像素點並進行像素點重組，設計超文字標記檔（HTML）之格式內容，將重組後之視訊內容呈現於超文字標記檔中。</p>
 <p>視頻流可以在大多數現代瀏覽器（即Firefox、Edge、Chrome 等）中使用，輸入路由器IP與外部連接埠端口即可開啟檔案以檢視機器人視野畫面。</p>
+<h1 id="實驗結果"><a href="#實驗結果" class="headerlink" title="實驗結果"></a>實驗結果</h1><h2 id="模型訓練"><a href="#模型訓練" class="headerlink" title="模型訓練"></a>模型訓練</h2><p>實驗中有4位受試者，共收集720筆人體運動數據，每個目標動作類別分別120筆，將每類別中9成數據用於訓練數據，1成數據用於驗證模型效能，下圖為行動者評論家網路訓練結果圖，模型訓練488個Epoch收斂，於i7-9700與NVIDIA GeForce RTX 2060訓練總時長約26.3小時。</p>
+<img src="/2022/06/05/skeleton-robot/image-20220606220158742.png" srcset="/img/loading.gif" lazyload alt="行動者評論家網路訊結果" style="zoom:50%;">
 
+<p>評論家網路透過Temporal Difference (TD) 來計算價值函數，將驗證資料隨機提取5000幀進行模型評估，下表列出不同step TD中模型評估結果，表中分別為平均獎勵與標準差，最終選擇使用1-step TD，因為它性能最佳擁有高平均獎勵與低標準差。</p>
+<p><img src="/2022/06/05/skeleton-robot/image-20220606220544406.png" srcset="/img/loading.gif" lazyload alt="驗證不同step間模型效能"></p>
+<h2 id="重定向效能評估"><a href="#重定向效能評估" class="headerlink" title="重定向效能評估"></a>重定向效能評估</h2><h3 id="已學習動作"><a href="#已學習動作" class="headerlink" title="已學習動作"></a>已學習動作</h3><p>針對6種學習動作歡呼(cheerup)、揮手(handwave)、指向(pfinger)、雙手合十(ppalm)、敬禮(salute)、擦臉(wface)進行效能評估，並使用關節夾角軌跡、餘弦相似度與弗雷歇距離（Fréchet distance）等方式，觀察人機之間運動軌跡的相似度。</p>
+<p>圖中左側為<em><strong>關節夾角軌跡圖</strong></em>，右側為手部四個部位之<em><strong>餘弦相似度圖</strong></em></p>
+<ul>
+<li><p>夾角軌跡圖: 人體與機器人在手部姿態有相同的軌跡趨勢，雙手合十、敬禮與擦臉三動作因硬體限制在動作過程存在角度偏差值。</p>
+</li>
+<li><p>餘弦相似度: 6個目標動作中四個手部部位的餘弦相似度平均有0.8以上，能達到相當好的重定向效果。</p>
+</li>
+</ul>
+<p><img src="/2022/06/05/skeleton-robot/image-20220606220943166.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2022/06/05/skeleton-robot/image-20220606221015629.png" srcset="/img/loading.gif" lazyload></p>
+<p><em><strong>弗雷歇距離</strong></em>（Fréchet distance）為一種路徑空間相似性的描述方式，基於動態規劃思想針對連續性軌跡進行匹配，將匹配距離與採樣方式合併考慮，弗雷歇距離目標求出能夠聯繫兩軌跡之間的最小距離，本研究為人體軌跡與機器人軌跡相比較。</p>
+<p>下表為強化學習與逆向運動學兩種方法之弗雷歇距離，單位為公尺，LE、RW、LW、RW分別為左右手肘與手腕，兩種方式之弗雷歇距離大都落在4公分內。</p>
+<p><img src="/2022/06/05/skeleton-robot/image-20220606234125495.png" srcset="/img/loading.gif" lazyload alt="learn Fréchet distance"></p>
+<h3 id="未學習動作"><a href="#未學習動作" class="headerlink" title="未學習動作"></a>未學習動作</h3><p>未學習動作的效果能夠測試模型的泛化能力，給定6個未學習的目標動作，擊掌、喝水、戴帽子、刷牙、擁抱、擺手等，透過下表弗雷歇距離可知強化學習在執行這些未學習的動作仍然有很好的表現。</p>
+<p><img src="/2022/06/05/skeleton-robot/image-20220606234905582.png" srcset="/img/loading.gif" lazyload alt="unlearn Fréchet distance"></p>
+<h3 id="強化學習-vs-逆向運動學"><a href="#強化學習-vs-逆向運動學" class="headerlink" title="強化學習 vs. 逆向運動學"></a>強化學習 vs. 逆向運動學</h3><p>逆向運動學以人體位置為標準依據，透過逆向運動學公式準確回推機器人關節角度以達目標位置，雖然逆向運動學方法精準，但不適用於真實應用情境中，因在做部分動作時機器人會發生自碰撞的現象。</p>
+<p>強化學習因機器人預先編譯動作，在動作設計中避免機器人碰撞現象發生，故強化學習在匹配人體與機器人潛在向量時會找潛在向量最相近者，同時會犧牲掉部分準確度，但也能避免掉自碰撞的現象發生。</p>
+<p>下圖中為執行雙手合十動作，第一張圖為強化學習結果，第二張圖為逆向運動學結果。</p>
+<div class="group-image-container"><div class="group-image-row"><div class="group-image-wrap"><img src="/2022/06/05/skeleton-robot/未碰撞.jpg" srcset="/img/loading.gif" lazyload alt="未碰撞" style="zoom:50%;"></div></div><div class="group-image-row"><div class="group-image-wrap"><img src="/2022/06/05/skeleton-robot/自碰撞.jpg" srcset="/img/loading.gif" lazyload alt="自碰撞" style="zoom:50%;"></div></div></div>
+
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="center">自碰撞</th>
+<th align="center">應用場景</th>
+<th align="center">準確度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">強化學習</td>
+<td align="center">X</td>
+<td align="center">實際與人交互</td>
+<td align="center">高</td>
+</tr>
+<tr>
+<td align="center">逆向運動學</td>
+<td align="center">O</td>
+<td align="center">機器人動作編譯</td>
+<td align="center">較高</td>
+</tr>
+</tbody></table>
+<section class="footnotes"><div class="footnote-list"><ol><li><span id="fn:1" class="footnote-text"><span>參考資料1
+<a href="#fnref:1" rev="footnote" class="footnote-backref"> ↩</a></span></span></li></ol></div></section>
               
             </div>
             <hr/>
@@ -418,16 +459,6 @@
 
     <div class="side-col d-none d-lg-block col-lg-2">
       
-  <aside class="sidebar" style="margin-left: -1rem">
-    <div id="toc">
-  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目錄</p>
-  <div class="toc-body" id="toc-body"></div>
-</div>
-
-
-
-  </aside>
-
 
     </div>
   </div>
