@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_TW">
 <meta property="og:image" content="http://example.com/img/%E6%A9%9F%E5%99%A8%E4%BA%BA.png">
 <meta property="article:published_time" content="2022-06-05T14:32:56.358Z">
-<meta property="article:modified_time" content="2022-06-07T06:12:42.316Z">
+<meta property="article:modified_time" content="2022-06-19T14:30:39.068Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="慣性感測器">
 <meta property="article:tag" content="人工智慧">
@@ -325,7 +325,7 @@
 <p>透過Wi-Fi連線至機器人鏡頭伺服器，電腦接收機器人視訊畫面後，取出視訊內容之像素點並進行像素點重組，設計超文字標記檔（HTML）之格式內容，將重組後之視訊內容呈現於超文字標記檔中。</p>
 <p>視頻流可以在大多數現代瀏覽器（即Firefox、Edge、Chrome 等）中使用，輸入路由器IP與外部連接埠端口即可開啟檔案以檢視機器人視野畫面。</p>
 <h1 id="實驗結果"><a href="#實驗結果" class="headerlink" title="實驗結果"></a>實驗結果</h1><h2 id="模型訓練"><a href="#模型訓練" class="headerlink" title="模型訓練"></a>模型訓練</h2><p>實驗中有4位受試者，共收集720筆人體運動數據，每個目標動作類別分別120筆，將每類別中9成數據用於訓練數據，1成數據用於驗證模型效能，下圖為行動者評論家網路訓練結果圖，模型訓練488個Epoch收斂，於i7-9700與NVIDIA GeForce RTX 2060訓練總時長約26.3小時。</p>
-<img src="/2022/06/05/skeleton-robot/image-20220606220158742.png" srcset="/img/loading.gif" lazyload alt="行動者評論家網路訊結果" style="zoom:50%;">
+<div class="group-image-container"><div class="group-image-row"><div class="group-image-wrap"><img src="/2022/06/05/skeleton-robot/image-20220606220158742.png" srcset="/img/loading.gif" lazyload alt="行動者評論家網路訊結果" style="zoom:50%;"></div></div></div>
 
 <p>評論家網路透過Temporal Difference (TD) 來計算價值函數，將驗證資料隨機提取5000幀進行模型評估，下表列出不同step TD中模型評估結果，表中分別為平均獎勵與標準差，最終選擇使用1-step TD，因為它性能最佳擁有高平均獎勵與低標準差。</p>
 <p><img src="/2022/06/05/skeleton-robot/image-20220606220544406.png" srcset="/img/loading.gif" lazyload alt="驗證不同step間模型效能"></p>
@@ -344,35 +344,51 @@
 <p><img src="/2022/06/05/skeleton-robot/image-20220606234125495.png" srcset="/img/loading.gif" lazyload alt="learn Fréchet distance"></p>
 <h3 id="未學習動作"><a href="#未學習動作" class="headerlink" title="未學習動作"></a>未學習動作</h3><p>未學習動作的效果能夠測試模型的泛化能力，給定6個未學習的目標動作，擊掌、喝水、戴帽子、刷牙、擁抱、擺手等，透過下表弗雷歇距離可知強化學習在執行這些未學習的動作仍然有很好的表現。</p>
 <p><img src="/2022/06/05/skeleton-robot/image-20220606234905582.png" srcset="/img/loading.gif" lazyload alt="unlearn Fréchet distance"></p>
-<h3 id="強化學習-vs-逆向運動學"><a href="#強化學習-vs-逆向運動學" class="headerlink" title="強化學習 vs. 逆向運動學"></a>強化學習 vs. 逆向運動學</h3><p>逆向運動學以人體位置為標準依據，透過逆向運動學公式準確回推機器人關節角度以達目標位置，雖然逆向運動學方法精準，但不適用於真實應用情境中，因在做部分動作時機器人會發生自碰撞的現象。</p>
-<p>強化學習因機器人預先編譯動作，在動作設計中避免機器人碰撞現象發生，故強化學習在匹配人體與機器人潛在向量時會找潛在向量最相近者，同時會犧牲掉部分準確度，但也能避免掉自碰撞的現象發生。</p>
-<p>下圖中為執行雙手合十動作，第一張圖為強化學習結果，第二張圖為逆向運動學結果。</p>
-<div class="group-image-container"><div class="group-image-row"><div class="group-image-wrap"><img src="/2022/06/05/skeleton-robot/未碰撞.jpg" srcset="/img/loading.gif" lazyload alt="未碰撞" style="zoom:50%;"></div></div><div class="group-image-row"><div class="group-image-wrap"><img src="/2022/06/05/skeleton-robot/自碰撞.jpg" srcset="/img/loading.gif" lazyload alt="自碰撞" style="zoom:50%;"></div></div></div>
-
+<h3 id="強化學習-vs-逆向運動學"><a href="#強化學習-vs-逆向運動學" class="headerlink" title="強化學習 vs. 逆向運動學"></a>強化學習 vs. 逆向運動學</h3><p><strong>逆向運動學</strong>以人體位置為標準依據，透過逆向運動學公式解準確回推機器人關節角度以達到目標位置，然而人與機器人手臂配置不同，因此在做部分動作時機器人會發生自碰撞的現象如下圖紅色區塊處，然而在執行擁抱動作時黃色區塊位置能看出逆向運動學法於手腕處並未呈現出擁抱正確的姿態，故逆向運動學法不適用於真實應用情境中。</p>
+<p><strong>強化式學習</strong>對於機器人預先編譯動作，資料增強階段加入限定範圍雜訊避免機器人自碰撞現象發生，因此在匹配人體與機器人潛在向量時能夠避免自碰撞現象發生，且能夠根據軌跡經驗做出正確的旋轉角，雖然考慮自碰撞問題會犧牲掉部分準確度，但在容許誤差範圍內此方法適用於與人互動應用情境中。</p>
+<p>實際應用場域中，數據經過Wi-Fi遠端傳輸，可能會有網路卡頓與封包掉點等情況發生，逆向運動學僅能依據當下位置推算機器人行為，未能考慮時序資訊，強化式學習法因學習序列的決策，會考慮時序上動作機率的問題，依據軌跡經驗推測行為，在封包掉點的情境中強化式學習法亦為可行方案。</p>
+<blockquote>
+<p> 目標學習動作-雙手合十 (自碰撞</p>
+</blockquote>
+<p><img src="/2022/06/05/skeleton-robot/%E8%87%AA%E7%A2%B0%E6%92%9E.png" srcset="/img/loading.gif" lazyload alt="自碰撞"></p>
+<blockquote>
+<p>未學習動作-擁抱 (關節旋轉不正確</p>
+</blockquote>
+<p><img src="/2022/06/05/skeleton-robot/%E6%97%8B%E8%BD%89%E4%B8%8D%E6%AD%A3%E7%A2%BA.png" srcset="/img/loading.gif" lazyload alt="旋轉不正確"></p>
+<blockquote>
+<p>方法分析</p>
+</blockquote>
 <table>
 <thead>
 <tr>
 <th align="center"></th>
-<th align="center">自碰撞</th>
+<th align="center">自碰撞考慮</th>
+<th align="center">關節旋轉考慮</th>
+<th align="center">時序資訊</th>
 <th align="center">應用場景</th>
 <th align="center">準確度</th>
 </tr>
 </thead>
 <tbody><tr>
 <td align="center">強化學習</td>
-<td align="center">X</td>
+<td align="center">O</td>
+<td align="center">O</td>
+<td align="center">O</td>
 <td align="center">實際與人交互</td>
 <td align="center">高</td>
 </tr>
 <tr>
 <td align="center">逆向運動學</td>
-<td align="center">O</td>
-<td align="center">機器人動作編譯</td>
+<td align="center">X</td>
+<td align="center">X</td>
+<td align="center">X</td>
+<td align="center">機器人快速動作編譯</td>
 <td align="center">較高</td>
 </tr>
 </tbody></table>
-<section class="footnotes"><div class="footnote-list"><ol><li><span id="fn:1" class="footnote-text"><span>參考資料1
-<a href="#fnref:1" rev="footnote" class="footnote-backref"> ↩</a></span></span></li></ol></div></section>
+<h3 id="系統評估"><a href="#系統評估" class="headerlink" title="系統評估"></a>系統評估</h3><p>要求一位未曾參與過實驗的受試者根據自身習慣執行6個學習的目標動作，其中每個動作做20次，依據強化式學習的方法對機器人手部做運動重定向，對每個動作的20次數據取平均弗雷歇距離，測試手部系統重定向的穩定度，本系統平均軌跡誤差為2.8公分，在重定向控制上具備很高的穩定度。</p>
+<p><img src="/2022/06/05/skeleton-robot/image-20220619221843377.png" srcset="/img/loading.gif" lazyload alt="系統評估"></p>
+
               
             </div>
             <hr/>
@@ -435,6 +451,12 @@
                 <div class="post-prevnext my-3">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2022/06/19/blindness-detect/" title="Kaggle競賽銀牌-APTOS 2019 Blindness Detection">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Kaggle競賽銀牌-APTOS 2019 Blindness Detection</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">
