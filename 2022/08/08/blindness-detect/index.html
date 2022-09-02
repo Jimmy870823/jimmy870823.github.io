@@ -1,0 +1,781 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-TW" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Kaggle平台發布之 APTOS 2019 Blindness Detection 競賽，基於Efficientnet與多種深度神經網路結合，設計一糖尿病視網膜病變分類系統，並於競賽中榮獲第19名(19&#x2F;2943)全球Top 1%。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kaggle競賽銀牌-APTOS 2019 Blindness Detection">
+<meta property="og:url" content="http://example.com/2022/08/08/blindness-detect/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Kaggle平台發布之 APTOS 2019 Blindness Detection 競賽，基於Efficientnet與多種深度神經網路結合，設計一糖尿病視網膜病變分類系統，並於競賽中榮獲第19名(19&#x2F;2943)全球Top 1%。">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="http://example.com/img/Big-data_Banner.png">
+<meta property="article:published_time" content="2022-08-08T06:24:30.533Z">
+<meta property="article:modified_time" content="2022-09-01T12:57:43.978Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="影像處理">
+<meta property="article:tag" content="人工智慧">
+<meta property="article:tag" content="人機介面">
+<meta property="article:tag" content="Kaggle">
+<meta property="article:tag" content="大數據競賽">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/img/Big-data_Banner.png">
+  
+  
+  
+  <title>Kaggle競賽銀牌-APTOS 2019 Blindness Detection - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.1","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"left","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Jimmy Portfolio</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首頁
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分類
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                關於
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/Big-data_Banner.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Kaggle競賽銀牌-APTOS 2019 Blindness Detection"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+  </div>
+
+  <div class="mt-1">
+    
+
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="padding-left: 2rem; margin-right: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目錄</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Kaggle競賽銀牌-APTOS 2019 Blindness Detection</h1>
+            
+            <div class="markdown-body">
+              
+              <blockquote>
+<p>此作品為大學專題並參與Kaggle大數據競賽榮獲銀獎</p>
+<p>此作品榮獲2020元智大學人工智慧競賽技術與應用組優等</p>
+</blockquote>
+<h1 id="比賽簡介"><a href="#比賽簡介" class="headerlink" title="比賽簡介"></a>比賽簡介</h1><p>糖尿病視網膜病變，此疾病為視網膜血管因病變導致血管的滲漏，造成視網膜組織傷害，以致所看到的影像變成模糊、扭曲或部份喪失。此疾病是導致成年人失明的三大主因之一。</p>
+<p>這項競賽由APTOS : Asia Pacific Tele-Ophthalmology Society所舉辨，APTOS為亞太地區一群傑出的遠程眼科專家於2016年5月創立，匯集臨床醫師、研究人員、技術人員相互交流合作，促進眼科學的進展。APTOS欲透過人工智慧的力量，幫助醫療資源貧乏地區的人民預防此種疾病。<img src="/2022/08/08/blindness-detect/header.png" srcset="/img/loading.gif" lazyload alt="header"></p>
+<h1 id="資料集"><a href="#資料集" class="headerlink" title="資料集"></a>資料集</h1><h2 id="比賽資料集-APTOS-2019-Blindness-Detection"><a href="#比賽資料集-APTOS-2019-Blindness-Detection" class="headerlink" title="比賽資料集 - APTOS 2019 Blindness Detection"></a>比賽資料集 - APTOS 2019 Blindness Detection</h2><p>這些圖像從多個診所使用各種相機收集而來。圖像可能包含偽影、失焦、曝光不足或過度曝光。</p>
+<ul>
+<li>3662 Training set (有標籤)</li>
+<li>1928 Public test set (無標籤，用於比賽期間的Public Leaderboard)</li>
+<li>20GB Private test set (隱藏的資料，用於結算比賽成績的Private Leaderboard)</li>
+</ul>
+<p>本此比賽主辦方所提供的資料庫根據以下等級，臨床醫生根據0至4的等級評估每張圖像中糖尿病視網膜病變：</p>
+<table>
+<thead>
+<tr>
+<th align="center">病變程度類別</th>
+<th align="center">眼底鏡照</th>
+<th>症狀</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">0-NO DR</td>
+<td align="center"><img src="/2022/08/08/blindness-detect/0.jpg" srcset="/img/loading.gif" lazyload alt="0" style="zoom: 67%;"></td>
+<td>健康的眼睛</td>
+</tr>
+<tr>
+<td align="center">1-Mild DR</td>
+<td align="center"><img src="/2022/08/08/blindness-detect/1.jpg" srcset="/img/loading.gif" lazyload alt="1" style="zoom: 67%;"></td>
+<td>僅限微動脈瘤</td>
+</tr>
+<tr>
+<td align="center">2-Moderate DR</td>
+<td align="center"><img src="/2022/08/08/blindness-detect/2.jpg" srcset="/img/loading.gif" lazyload alt="2" style="zoom: 67%;"></td>
+<td>微動脈瘤視網膜內出血</td>
+</tr>
+<tr>
+<td align="center">3-Severe DR</td>
+<td align="center"><img src="/2022/08/08/blindness-detect/3.jpg" srcset="/img/loading.gif" lazyload alt="3" style="zoom: 67%;"></td>
+<td>大量視網膜內出血念珠菌感染視網膜內微血管異常增長但沒有PDR現象</td>
+</tr>
+<tr>
+<td align="center">4-Proliferative DR</td>
+<td align="center"><img src="/2022/08/08/blindness-detect/4.png" srcset="/img/loading.gif" lazyload alt="4" style="zoom: 67%;"></td>
+<td>以下兩種情況之一：新生血管形成玻璃體&#x2F;視網膜前出血</td>
+</tr>
+</tbody></table>
+<h2 id="擴增資料集-2015-Diabetic-Retinopathy-Detection"><a href="#擴增資料集-2015-Diabetic-Retinopathy-Detection" class="headerlink" title="擴增資料集-2015 Diabetic Retinopathy Detection"></a>擴增資料集-2015 Diabetic Retinopathy Detection</h2><p>2015在Kaggle由California Healthcare Foundation贊助舉辦的另一場糖尿病視網膜病變檢測競賽所提供的資料庫，擁有與本次競賽相同的分類標籤與眼底鏡圖片。可作為本次競賽的擴充資料使用。</p>
+<ul>
+<li>35126 Training set (有標籤)</li>
+<li>53576 Training set (有標籤)</li>
+</ul>
+<h1 id="資料分析"><a href="#資料分析" class="headerlink" title="資料分析"></a>資料分析</h1><p>本次比賽的訓練數據集非常不平衡。沒有DR的圖像相較於具有嚴重DR條件的圖像多十倍。因此我們需要對此資料集進行擴充。</p>
+<p><img src="/2022/08/08/blindness-detect/%E8%B3%87%E6%96%99%E5%88%86%E6%9E%90.png" srcset="/img/loading.gif" lazyload alt="資料分析"></p>
+<h1 id="訓練前處理"><a href="#訓練前處理" class="headerlink" title="訓練前處理"></a>訓練前處理</h1><h2 id="資料增強"><a href="#資料增強" class="headerlink" title="資料增強"></a>資料增強</h2><p>為確保我們的網路在訓練資料時不會產生過度擬合(Over-fitting)的現象，我們使用了資料增強(Data augmentation)技術，實作方式即是每張圖像傳入神經網路訓練前，對其進行隨機的旋轉、調整大小、比例尺寸，或者改變亮度色溫、翻轉等處理。如此操作可以提升資料多樣性，避免網路過度擬合，且增強網路的泛化能力。</p>
+<p><img src="/2022/08/08/blindness-detect/%E5%89%8D%E8%99%95%E7%90%86.png" srcset="/img/loading.gif" lazyload alt="前處理"> </p>
+<h2 id="遷移式學習"><a href="#遷移式學習" class="headerlink" title="遷移式學習"></a>遷移式學習</h2><p>這次競賽我們選用了來自Google的EfficientNet ，利用ImageNet的pretrain weight預先對2015和2019年的資料集做遷移式學習，再用訓練完的weight對2019年的資料做fine-tune，以保證模型收斂能確實符合本次競賽。</p>
+<blockquote>
+<p>基於EfficientNet使用遷移式學習所得到準確度</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th align="center">Model</th>
+<th align="center">bs&#x2F;ep&#x2F;sz</th>
+<th align="center">CV</th>
+<th align="center">LB</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><strong>EfficientNet b4</strong></td>
+<td align="center">64&#x2F;10&#x2F;224</td>
+<td align="center">0.9381</td>
+<td align="center">0.813</td>
+</tr>
+<tr>
+<td align="center"><strong>EfficientNet b5</strong></td>
+<td align="center">32&#x2F;10&#x2F;260</td>
+<td align="center">0.9454</td>
+<td align="center">0.817</td>
+</tr>
+</tbody></table>
+<p>(bs: batch size, ep: epoch, sz: input size, CV: cross validation, LB: Leader Board)</p>
+<h2 id="K-fold"><a href="#K-fold" class="headerlink" title="K-fold"></a>K-fold</h2><p>K-fold是常用的交叉驗證(Cross validation)方法。如Fig. 4-3，做法是將資料隨機平均分成5個集合，然後將其中一個集合當做驗證資料，剩下的4個集合做為訓練資料，如此重複進行直到每一個集合都被當做驗證資料為止。以訓練完的這五個模型對資料進行預測，最後將這五次預測結果取平均來作為最終的預測答案。</p>
+<h2 id="前處理訓練流程圖"><a href="#前處理訓練流程圖" class="headerlink" title="前處理訓練流程圖"></a>前處理訓練流程圖</h2><p><img src="/2022/08/08/blindness-detect/%E5%89%8D%E8%99%95%E7%90%86%E8%88%87%E8%A8%93%E7%B7%B4%E6%B5%81%E7%A8%8B%E5%9C%96.png" srcset="/img/loading.gif" lazyload alt="前處理與訓練流程圖"></p>
+<h1 id="訓練後處理"><a href="#訓練後處理" class="headerlink" title="訓練後處理"></a>訓練後處理</h1><h2 id="TTA-Test-Time-Augmentation"><a href="#TTA-Test-Time-Augmentation" class="headerlink" title="TTA(Test Time Augmentation)"></a>TTA(Test Time Augmentation)</h2><p>模型若僅進行一次預測的結果不一定能得到正確答案，針對測試資料做影像加強，包括不同區域裁剪和更改縮放程度等，並對不同版本的圖像進行預測，能得到多個結果，最後進行平均輸出作為最終結果，如此能夠提高結果的穩定性與精確度。在加入TTA後，LB分數有了顯著的上升</p>
+<blockquote>
+<p>基於EfficientNet b4的模型，使用TTA前後對比</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th align="center">Model</th>
+<th align="center">bs&#x2F;ep&#x2F;sz</th>
+<th align="center">post process</th>
+<th align="center">LB</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><strong>EfficientNet b4</strong></td>
+<td align="center">64&#x2F;10&#x2F;224</td>
+<td align="center">-</td>
+<td align="center">0.805</td>
+</tr>
+<tr>
+<td align="center"><strong>EfficientNet b4</strong></td>
+<td align="center">64&#x2F;10&#x2F;224</td>
+<td align="center">TTA</td>
+<td align="center">0.813</td>
+</tr>
+</tbody></table>
+<h2 id="Model-Ensemble"><a href="#Model-Ensemble" class="headerlink" title="Model Ensemble"></a>Model Ensemble</h2><p>訓練多組模型，將預測結果做平均，以降低模型的bias、variance，提升預測準確度及穩定度，進行多組實驗後我們決定選用EfficientNet b4、EfficientNet b5進行Ensemble。</p>
+<blockquote>
+<p> Model Ensemble前後對比</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th align="center">Model</th>
+<th align="center">bs&#x2F;ep&#x2F;sz</th>
+<th align="center">CV</th>
+<th align="center">LB</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><strong>EfficientNet b4</strong></td>
+<td align="center">64&#x2F;10&#x2F;224</td>
+<td align="center">0.9381</td>
+<td align="center">0.813</td>
+</tr>
+<tr>
+<td align="center"><strong>EfficientNet b5</strong></td>
+<td align="center">32&#x2F;10&#x2F;260</td>
+<td align="center">0.9454</td>
+<td align="center">0.817</td>
+</tr>
+<tr>
+<td align="center"><strong>Ensemble b4&amp;b5</strong></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">0.822</td>
+</tr>
+</tbody></table>
+<h2 id="後處理與預測流程圖"><a href="#後處理與預測流程圖" class="headerlink" title="後處理與預測流程圖"></a>後處理與預測流程圖</h2><p><img src="/2022/08/08/blindness-detect/%E5%BE%8C%E8%99%95%E7%90%86%E8%88%87%E9%A0%90%E6%B8%AC%E6%B5%81%E7%A8%8B%E5%9C%96.png" srcset="/img/loading.gif" lazyload alt="後處理與預測流程圖"></p>
+<h1 id="競賽成果"><a href="#競賽成果" class="headerlink" title="競賽成果"></a>競賽成果</h1><p>此競賽全球共2943隊參加，本隊獲得本次競賽銀牌第19名(Top1%)</p>
+<table>
+<thead>
+<tr>
+<th align="center">Leader board</th>
+<th align="center">Rank</th>
+<th align="center">Score</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><strong>Public</strong></td>
+<td align="center">88</td>
+<td align="center">0.822879</td>
+</tr>
+<tr>
+<td align="center"><strong>Private</strong></td>
+<td align="center">19 (Final standings)</td>
+<td align="center">0.929524</td>
+</tr>
+</tbody></table>
+<p><img src="/2022/08/08/blindness-detect/%E7%AB%B6%E8%B3%BD%E6%88%90%E6%9E%9C.png" srcset="/img/loading.gif" lazyload alt="競賽成果"></p>
+<p>此作品參與2020元智大學人工智慧競賽技術與應用組，榮獲優等</p>
+<div class="group-image-container"><div class="group-image-row"><div class="group-image-wrap"><img src="/2022/08/08/blindness-detect/競賽成果2.jpg" srcset="/img/loading.gif" lazyload alt="競賽成果2" style="zoom:33%;"></div></div></div>
+
+<h1 id="GUI-設計"><a href="#GUI-設計" class="headerlink" title="GUI 設計"></a>GUI 設計</h1><p>在競賽過程中，設計出一套精確的模型，為了使模型達到最佳效益，我們著手設計使用者介面並結合模型，讓偵測糖尿病視網膜病變能夠具體化，且讓使用者在介面操作上能夠快速上手。</p>
+<p><img src="/2022/08/08/blindness-detect/GUI2.png" srcset="/img/loading.gif" lazyload alt="GUI2"></p>
+
+              
+            </div>
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%AB%B6%E8%B3%BD/" class="category-chain-item">競賽</a>
+  
+  
+
+      </span>
+    
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%A4%A7%E5%AD%B8%E5%B0%88%E9%A1%8C/" class="category-chain-item">大學專題</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%BD%B1%E5%83%8F%E8%99%95%E7%90%86/">#影像處理</a>
+      
+        <a href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E6%85%A7/">#人工智慧</a>
+      
+        <a href="/tags/%E4%BA%BA%E6%A9%9F%E4%BB%8B%E9%9D%A2/">#人機介面</a>
+      
+        <a href="/tags/Kaggle/">#Kaggle</a>
+      
+        <a href="/tags/%E5%A4%A7%E6%95%B8%E6%93%9A%E7%AB%B6%E8%B3%BD/">#大數據競賽</a>
+      
+    </div>
+  
+</div>
+
+
+              
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/08/08/skeleton-robot/" title="使用強化學習之動作同步遠端操控人型機器人">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">使用強化學習之動作同步遠端操控人型機器人</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/08/08/ai-mango/" title="愛文芒果不良品辨識競賽">
+                        <span class="hidden-mobile">愛文芒果不良品辨識競賽</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜尋</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">關鍵字</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script>
+  (function() {
+    var enableLang = CONFIG.code_language.enable && CONFIG.code_language.default;
+    var enableCopy = CONFIG.copy_btn;
+    if (!enableLang && !enableCopy) {
+      return;
+    }
+
+    function getBgClass(ele) {
+      return Fluid.utils.getBackgroundLightness(ele) >= 0 ? 'code-widget-light' : 'code-widget-dark';
+    }
+
+    var copyTmpl = '';
+    copyTmpl += '<div class="code-widget">';
+    copyTmpl += 'LANG';
+    copyTmpl += '</div>';
+    jQuery('.markdown-body pre').each(function() {
+      var $pre = jQuery(this);
+      if ($pre.find('code.mermaid').length > 0) {
+        return;
+      }
+      if ($pre.find('span.line').length > 0) {
+        return;
+      }
+
+      var lang = '';
+
+      if (enableLang) {
+        lang = CONFIG.code_language.default;
+        if ($pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2 && $pre.children().hasClass('hljs')) {
+          lang = $pre[0].children[0].classList[1];
+        } else if ($pre[0].getAttribute('data-language')) {
+          lang = $pre[0].getAttribute('data-language');
+        } else if ($pre.parent().hasClass('sourceCode') && $pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2) {
+          lang = $pre[0].children[0].classList[1];
+          $pre.parent().addClass('code-wrapper');
+        } else if ($pre.parent().hasClass('markdown-body') && $pre[0].classList.length === 0) {
+          $pre.wrap('<div class="code-wrapper"></div>');
+        }
+        lang = lang.toUpperCase().replace('NONE', CONFIG.code_language.default);
+      }
+      $pre.append(copyTmpl.replace('LANG', lang).replace('code-widget">',
+        getBgClass($pre[0]) + (enableCopy ? ' code-widget copy-btn" data-clipboard-snippet><i class="iconfont icon-copy"></i>' : ' code-widget">')));
+
+      if (enableCopy) {
+        Fluid.utils.createScript('https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js', function() {
+          var clipboard = new window.ClipboardJS('.copy-btn', {
+            target: function(trigger) {
+              var nodes = trigger.parentNode.childNodes;
+              for (var i = 0; i < nodes.length; i++) {
+                if (nodes[i].tagName === 'CODE') {
+                  return nodes[i];
+                }
+              }
+            }
+          });
+          clipboard.on('success', function(e) {
+            e.clearSelection();
+            e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-copy', 'icon-success');
+            setTimeout(function() {
+              e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-success', 'icon-copy');
+            }, 2000);
+          });
+        });
+      }
+    });
+  })();
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允許 JavaScript 運行的環境下瀏覽效果更佳</div>
+  </noscript>
+</body>
+</html>

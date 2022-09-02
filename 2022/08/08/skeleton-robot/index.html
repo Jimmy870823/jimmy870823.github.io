@@ -1,0 +1,757 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-TW" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="設計一套基於姿態遠端控制機器人系統，操作者配戴感測器對機器人手部姿態重定向與腿部控制，搭配語音系統使人機兩端能進行語音通訊，頭部配戴VR頭戴顯示器以獲取機器人視野，藉此將自己化身為機器人與他人進行互動。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用強化學習之動作同步遠端操控人型機器人">
+<meta property="og:url" content="http://example.com/2022/08/08/skeleton-robot/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="設計一套基於姿態遠端控制機器人系統，操作者配戴感測器對機器人手部姿態重定向與腿部控制，搭配語音系統使人機兩端能進行語音通訊，頭部配戴VR頭戴顯示器以獲取機器人視野，藉此將自己化身為機器人與他人進行互動。">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="http://example.com/img/4.png">
+<meta property="article:published_time" content="2022-08-08T06:24:30.578Z">
+<meta property="article:modified_time" content="2022-09-01T13:20:32.268Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="慣性感測器">
+<meta property="article:tag" content="人工智慧">
+<meta property="article:tag" content="運動重定向">
+<meta property="article:tag" content="系統設計">
+<meta property="article:tag" content="Nao 機器人">
+<meta property="article:tag" content="強化學習">
+<meta property="article:tag" content="逆向運動學">
+<meta property="article:tag" content="碩士論文">
+<meta property="article:tag" content="虛擬實境">
+<meta property="article:tag" content="通訊協定">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/img/4.png">
+  
+  
+  
+  <title>使用強化學習之動作同步遠端操控人型機器人 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.1","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"left","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Jimmy Portfolio</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首頁
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分類
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                關於
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/%E7%B3%BB%E7%B5%B1%E6%9E%B6%E6%A7%8B%E5%9C%96.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="使用強化學習之動作同步遠端操控人型機器人"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+  </div>
+
+  <div class="mt-1">
+    
+
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="padding-left: 2rem; margin-right: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目錄</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">使用強化學習之動作同步遠端操控人型機器人</h1>
+            
+            <div class="markdown-body">
+              
+              <blockquote>
+<p>此作品為碩士論文，並參與2022年未來科技獎競賽</p>
+<p>完整競賽影片 : <a target="_blank" rel="noopener" href="https://youtu.be/gdf7ZX6rv9M"><em>2022未來科技獎</em></a> (於影片後段有demo影片)</p>
+</blockquote>
+<h1 id="論文摘要"><a href="#論文摘要" class="headerlink" title="論文摘要"></a>論文摘要</h1><p>設計一套基於姿態遠端控制機器人系統，操作者配戴感測器對機器人手部姿態重定向與腿部控制，搭配語音系統使人機兩端能進行語音通訊，頭部配戴VR頭戴顯示器以獲取機器人視野，藉此將自己化身為機器人與他人進行互動。</p>
+<h1 id="系統架構"><a href="#系統架構" class="headerlink" title="系統架構"></a>系統架構</h1><ul>
+<li><p>操作者遠程控制系統</p>
+<p>本研究操作者端將配戴HTC VIVE VR頭戴式顯示器以獲取機器人視野畫面與機器人頭部轉向控制，透過麥克風與喇叭與機器人端進行對話交流，人體姿態感測系統由14顆姿態感測器所組成。</p>
+</li>
+<li><p>人體運動捕捉系統</p>
+<p>將人體姿態投射於Unity中，收集25個關節之三軸座標位置，並依據Kinect V2所定義之關節點作為本研究關節資料儲存形式。</p>
+</li>
+<li><p>機器人系統</p>
+<p>本研究使用機器人為Nao-V6，全身配有25個自由度，主要分布於頭部、手部與足部。</p>
+<ol>
+<li>手部控制:  能夠透過強化學習與逆向運動學兩種模式實現。</li>
+<li>腿部控制: 為考慮機器人安全性，腿部動作使用預設前進、側移、轉向等動作。</li>
+<li>頭部控制: 透過虛擬實境頭盔控制機器人頭部轉向，與機器人視野追蹤。</li>
+<li>音訊控制: 建立錄音、播音系統傳輸兩地音訊。</li>
+</ol>
+</li>
+</ul>
+<p><img src="/2022/08/08/skeleton-robot/%E7%B3%BB%E7%B5%B1%E6%9E%B6%E6%A7%8B%E5%9C%96.png" srcset="/img/loading.gif" lazyload alt="系統架構圖"></p>
+<h1 id="資料傳輸"><a href="#資料傳輸" class="headerlink" title="資料傳輸"></a>資料傳輸</h1><p>資料傳輸透過Python Socket TCP網路通訊程式實現，在傳輸系統中又分為服務端（Server）與客戶端（Client），給定IP地址、協議方式與連接埠來建立溝通。</p>
+<p>本研究以TCP協定進行資料傳輸，由於機器人需與路由器綁定，故於此路由器建立虛擬伺服器，並設置連接埠轉發功能，客戶端與服務端集可跨域傳輸資料。</p>
+<p><img src="/2022/08/08/skeleton-robot/TCP%E8%B3%87%E6%96%99%E5%82%B3%E8%BC%B8%E6%B5%81%E7%A8%8B.jpg" srcset="/img/loading.gif" lazyload alt="TCP資料傳輸流程"></p>
+<h1 id="系統設計"><a href="#系統設計" class="headerlink" title="系統設計"></a>系統設計</h1><p>本研究使用 <em><strong>強化學習</strong></em>  與 <em><strong>逆向運動學</strong></em>  兩方式對機器人手臂作運動重定向，分析兩種方法之優劣。</p>
+<h2 id="手部控制"><a href="#手部控制" class="headerlink" title="手部控制"></a>手部控制</h2><h3 id="資料前處理"><a href="#資料前處理" class="headerlink" title="資料前處理"></a>資料前處理</h3><p>Unity與機器人兩座標軸不同，建立方向餘弦(DCM)矩陣，將Unity中的骨骼資訊進行座標轉換至機器人座標軸。</p>
+<p><img src="/2022/08/08/skeleton-robot/image-20220606135339929.png" srcset="/img/loading.gif" lazyload alt="DCM matrix"></p>
+<p><img src="/2022/08/08/skeleton-robot/%E5%9D%90%E6%A8%99%E8%BB%B8%E8%BD%89%E6%8F%9B.jpg" srcset="/img/loading.gif" lazyload alt="坐標軸轉換"></p>
+<p>座標軸轉換結果</p>
+<p><img src="/2022/08/08/skeleton-robot/image-20220606135629470.png" srcset="/img/loading.gif" lazyload alt="前處理結果"></p>
+<h3 id="1-逆向運動學"><a href="#1-逆向運動學" class="headerlink" title="1. 逆向運動學"></a>1. 逆向運動學</h3><p>下圖為機器人左右手臂的鏈結框架。</p>
+<p><img src="/2022/08/08/skeleton-robot/image-20220606140055204.png" srcset="/img/loading.gif" lazyload alt="D-H模型 關節軸配置"></p>
+<p>Denavit-Hartenberg參數模型(D-H模型)，將每個連桿建構座標系，以便描述當前連桿座標系與相鄰連桿座標系之間的轉換關係，下表為Nao機器人依據鏈結框架所建置之D-H模型。</p>
+<p><img src="/2022/08/08/skeleton-robot/image-20220606142529516.png" srcset="/img/loading.gif" lazyload alt="D-H參數表"></p>
+<p>因左右手臂參數模型不同，故左右手臂有不同的逆向運動解。由於機器人與人體維度不同，需將前處理後人體向量映射至機器人向量，代入逆向運動學公式中，即可回推機器人手臂關節旋轉角，以驅動機器人手臂至目標位置，使機器人模仿人體的手部姿態。</p>
+<p><img src="/2022/08/08/skeleton-robot/image-20220606144037070.png" srcset="/img/loading.gif" lazyload alt="逆向運動學解"></p>
+<h3 id="2-強化學習"><a href="#2-強化學習" class="headerlink" title="2. 強化學習"></a>2. 強化學習</h3><p>強化學習模型使用<em><strong>行動者評論家網路</strong></em>，為一種結合策略梯度與時序差分（Temporal difference）的強化學習方法，它使用兩個深度學習模型，分別為行動者與評論家。行動者模型學習在特定環境狀態下應該執行什麼動作，當行動者模型選擇的動作被執行後，智能體與評論家模型將從環境中獲得獎勵。評論家模型的作用為優化行動者模型，將行動者模型依據前狀態採取之動作給予評級，而智能體將基於評級比較當前策略與新策略，並決定如何改進行動者模型以採取更好的行動。</p>
+<div class="group-image-container"><div class="group-image-row"><div class="group-image-wrap"><img src="/2022/08/08/skeleton-robot/行動者評論家演算法.jpg" srcset="/img/loading.gif" lazyload alt="行動者評論家演算法" style="zoom: 67%;"></div></div></div>
+
+<p>給定6個目標動作，分別為歡呼、揮手、指向、擦臉、敬禮、雙手合十，這些動作是人與人之間常有的互動動作。機器人端預先設計好這6類動作，而受試者端透過人體運動捕捉系統蒐集6類運動數據，根據人體姿態能獲得所有關節之三軸位置數據。</p>
+<p><img src="/2022/08/08/skeleton-robot/image-20220606151145374.png" srcset="/img/loading.gif" lazyload alt="6類目標動作"></p>
+<p>行動者評論家網路以人體與機器人兩端之間的潛在向量作學習，人機兩端數據預先訓練<em><strong>變分自動編碼器網路</strong></em>（Variational Autoencoder, VAE），即可獲得兩端之間的潛在向量。</p>
+<p><img src="/2022/08/08/skeleton-robot/skel_vae.png" srcset="/img/loading.gif" lazyload alt="skel_vae"></p>
+<p><img src="/2022/08/08/skeleton-robot/robot_vae.png" srcset="/img/loading.gif" lazyload alt="robot_vae"></p>
+<ol>
+<li><p><em><strong>行動者-評論家網路架構</strong></em>，定義智能體之學習策略，模型前饋階段經前處理之骨骼數據會進行編碼，行動者網路將接收骨骼之隱藏含量並自動生成機器人之隱藏含量。</p>
+</li>
+<li><p>V-REP軟體為智能體與環境的接口，將解碼後的機器人動作於模擬器中實現，模擬器將輸出機器人關節角度與位置</p>
+</li>
+</ol>
+<ul>
+<li>位置: 計算手部向量相似度作為模型獎勵機制</li>
+<li>角度: 角度編碼後的隱藏含量與人體隱藏含量用於模型反饋階段，透過評論家網路給予評級優化行動者網路</li>
+</ul>
+<ol start="3">
+<li>智能體將比較當前策略與新策略，改進行動者網路以採取更好的行動。</li>
+</ol>
+<p><img src="/2022/08/08/skeleton-robot/image-20220606152926823.png" srcset="/img/loading.gif" lazyload alt="行動者評論家網路架構"></p>
+<p>模型目標成功讓智能體學習正確策略，並讓期望的折扣獎勵最大化，模型訓練完畢後人體姿態數據將透過行動者網路生成正確之機器人隱藏含量，並對隱藏含量解碼以得到正確之關節輸出角度。</p>
+<div class="group-image-container"><div class="group-image-row"><div class="group-image-wrap"><img src="/2022/08/08/skeleton-robot/image-20220606153331716.png" srcset="/img/loading.gif" lazyload style="zoom:67%;"></div></div></div>
+
+<h2 id="足部控制"><a href="#足部控制" class="headerlink" title="足部控制"></a>足部控制</h2><p>依照動畫中左大腿y軸旋轉角與右大腿z軸旋轉角來觸發足部行動。</p>
+<ul>
+<li>前進: 角度上升 當上升超越40度觸發</li>
+<li>側移: 角度下降 當下降超越15度觸發</li>
+<li>轉身: 將動畫面向方位與機器人面向方位對齊，當差距超過40度時，進行修正。</li>
+</ul>
+<p><img src="/2022/08/08/skeleton-robot/image-20220606213306159.png" srcset="/img/loading.gif" lazyload alt="image-20220606213306159"></p>
+<h2 id="音訊控制"><a href="#音訊控制" class="headerlink" title="音訊控制"></a>音訊控制</h2><p>語音系統由錄音系統與播放系統組成，操作者端錄音透過RMS值大小觸發，錄音系統需設定音量閥值，待RMS值大於閥值觸發錄音，由於講話換氣時RMS值會驟降，故限制RMS值小於閥值持續1秒後才中斷錄音，避免斷續錄音的問題，錄完的音檔寫入至兩端共用之雲端硬碟內。</p>
+<p>播放系統為播放雲端硬碟中對方儲存之音檔，並持續檢查音訊檔案是否寫入完畢，寫入完畢才能進行播放動作，於兩系統加入條件讓錄音系統與播放系統能順利運行不互相衝突。</p>
+<div class="group-image-container"><div class="group-image-row"><div class="group-image-wrap"><img src="/2022/08/08/skeleton-robot/音訊架構.jpg" srcset="/img/loading.gif" lazyload alt="音訊架構"></div></div></div>
+
+<p>機器人端與操作者端語音系統邏輯設計相同，機器人觸發錄音時會將全身亮起黃色LED燈，並說”start recording”，錄音結束後會將LED熄滅，並說”record over”，以提示機器人端的使用者機器人當前語音系統狀態。</p>
+<div class="group-image-container"><div class="group-image-row"><div class="group-image-wrap"><img src="/2022/08/08/skeleton-robot/機器人端語音流程.jpg" srcset="/img/loading.gif" lazyload alt="機器人端語音流程" style="zoom: 80%;"></div></div></div>
+
+<h2 id="頭部控制"><a href="#頭部控制" class="headerlink" title="頭部控制"></a>頭部控制</h2><h3 id="頭部轉向"><a href="#頭部轉向" class="headerlink" title="頭部轉向"></a>頭部轉向</h3><p>將Unity與機器人座標軸對齊，並直接給定角度控制機器人頭部轉向。</p>
+<h3 id="鏡頭輸出"><a href="#鏡頭輸出" class="headerlink" title="鏡頭輸出"></a>鏡頭輸出</h3><p>機器人鏡頭輸出有多種色彩空間與解析度供選擇，本系統將鏡頭設置為RGB色彩空間，因考慮鏡頭畫面流暢度，解析度為320*420，每秒30幀。</p>
+<p>透過Wi-Fi連線至機器人鏡頭伺服器，電腦接收機器人視訊畫面後，取出視訊內容之像素點並進行像素點重組，設計超文字標記檔（HTML）之格式內容，將重組後之視訊內容呈現於超文字標記檔中。</p>
+<p>視頻流可以在大多數現代瀏覽器（即Firefox、Edge、Chrome 等）中使用，輸入路由器IP與外部連接埠端口即可開啟檔案以檢視機器人視野畫面。</p>
+<h1 id="實驗結果"><a href="#實驗結果" class="headerlink" title="實驗結果"></a>實驗結果</h1><h2 id="模型訓練"><a href="#模型訓練" class="headerlink" title="模型訓練"></a>模型訓練</h2><p>實驗中有4位受試者，共收集720筆人體運動數據，每個目標動作類別分別120筆，將每類別中9成數據用於訓練數據，1成數據用於驗證模型效能，下圖為行動者評論家網路訓練結果圖，模型訓練488個Epoch收斂，於i7-9700與NVIDIA GeForce RTX 2060訓練總時長約26.3小時。</p>
+<div class="group-image-container"><div class="group-image-row"><div class="group-image-wrap"><img src="/2022/08/08/skeleton-robot/ablation study.png" srcset="/img/loading.gif" lazyload alt="行動者評論家網路訓練結果" style="zoom:50%;"></div></div></div>
+
+<p>評論家網路透過Temporal Difference (TD) 來計算價值函數，將驗證資料隨機提取5000幀進行模型評估，下表列出不同step TD中模型評估結果，表中分別為平均獎勵與標準差，最終選擇使用1-step TD，因為它性能最佳擁有高平均獎勵與低標準差。</p>
+<p><img src="/2022/08/08/skeleton-robot/image-20220606220544406.png" srcset="/img/loading.gif" lazyload alt="驗證不同step間模型效能"></p>
+<h2 id="重定向效能評估"><a href="#重定向效能評估" class="headerlink" title="重定向效能評估"></a>重定向效能評估</h2><h3 id="已學習動作"><a href="#已學習動作" class="headerlink" title="已學習動作"></a>已學習動作</h3><p>針對6種學習動作歡呼(cheerup)、揮手(handwave)、指向(pfinger)、雙手合十(ppalm)、敬禮(salute)、擦臉(wface)進行效能評估，並使用關節夾角軌跡、餘弦相似度與弗雷歇距離（Fréchet distance）等方式，觀察人機之間運動軌跡的相似度。</p>
+<p>圖中左側為<em><strong>關節夾角軌跡圖</strong></em>，右側為手部四個部位之<em><strong>餘弦相似度圖</strong></em></p>
+<ul>
+<li><p>夾角軌跡圖: 人體與機器人在手部姿態有相同的軌跡趨勢，雙手合十、敬禮與擦臉三動作因硬體限制在動作過程存在角度偏差值。</p>
+</li>
+<li><p>餘弦相似度: 6個目標動作中四個手部部位的餘弦相似度平均有0.8以上，能達到相當好的重定向效果。</p>
+</li>
+</ul>
+<p><img src="/2022/08/08/skeleton-robot/image-20220606220943166.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2022/08/08/skeleton-robot/image-20220606221015629.png" srcset="/img/loading.gif" lazyload></p>
+<p><em><strong>弗雷歇距離</strong></em>（Fréchet distance）為一種路徑空間相似性的描述方式，基於動態規劃思想針對連續性軌跡進行匹配，將匹配距離與採樣方式合併考慮，弗雷歇距離目標求出能夠聯繫兩軌跡之間的最小距離，本研究為人體軌跡與機器人軌跡相比較。</p>
+<p>下表為強化學習與逆向運動學兩種方法之弗雷歇距離，單位為公尺，LE、RW、LW、RW分別為左右手肘與手腕，兩種方式之弗雷歇距離大都落在4公分內。</p>
+<p><img src="/2022/08/08/skeleton-robot/image-20220606234125495.png" srcset="/img/loading.gif" lazyload alt="learn Fréchet distance"></p>
+<h3 id="未學習動作"><a href="#未學習動作" class="headerlink" title="未學習動作"></a>未學習動作</h3><p>未學習動作的效果能夠測試模型的泛化能力，給定6個未學習的目標動作，擊掌、喝水、戴帽子、刷牙、擁抱、擺手等，透過下表弗雷歇距離可知強化學習在執行這些未學習的動作仍然有很好的表現。</p>
+<p><img src="/2022/08/08/skeleton-robot/image-20220606234905582.png" srcset="/img/loading.gif" lazyload alt="unlearn Fréchet distance"></p>
+<h3 id="強化學習-vs-逆向運動學"><a href="#強化學習-vs-逆向運動學" class="headerlink" title="強化學習 vs. 逆向運動學"></a>強化學習 vs. 逆向運動學</h3><p><strong>逆向運動學</strong>以人體位置為標準依據，透過逆向運動學公式解準確回推機器人關節角度以達到目標位置，然而人與機器人手臂配置不同，因此在做部分動作時機器人會發生自碰撞的現象如下圖紅色區塊處，然而在執行擁抱動作時黃色區塊位置能看出逆向運動學法於手腕處並未呈現出擁抱正確的姿態，故逆向運動學法不適用於真實應用情境中。</p>
+<p><strong>強化式學習</strong>對於機器人預先編譯動作，資料增強階段加入限定範圍雜訊避免機器人自碰撞現象發生，因此在匹配人體與機器人潛在向量時能夠避免自碰撞現象發生，且能夠根據軌跡經驗做出正確的旋轉角，雖然考慮自碰撞問題會犧牲掉部分準確度，但在容許誤差範圍內此方法適用於與人互動應用情境中。</p>
+<p>實際應用場域中，數據經過Wi-Fi遠端傳輸，可能會有網路卡頓與封包掉點等情況發生，逆向運動學僅能依據當下位置推算機器人行為，未能考慮時序資訊，強化式學習法因學習序列的決策，會考慮時序上動作機率的問題，依據軌跡經驗推測行為，在封包掉點的情境中強化式學習法亦為可行方案。</p>
+<blockquote>
+<p> 目標學習動作-雙手合十 (自碰撞</p>
+</blockquote>
+<p><img src="/2022/08/08/skeleton-robot/%E8%87%AA%E7%A2%B0%E6%92%9E.png" srcset="/img/loading.gif" lazyload alt="自碰撞"></p>
+<blockquote>
+<p>未學習動作-擁抱 (關節旋轉不正確</p>
+</blockquote>
+<p><img src="/2022/08/08/skeleton-robot/%E6%97%8B%E8%BD%89%E4%B8%8D%E6%AD%A3%E7%A2%BA.png" srcset="/img/loading.gif" lazyload alt="旋轉不正確"></p>
+<blockquote>
+<p>方法分析</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="center">自碰撞考慮</th>
+<th align="center">關節旋轉考慮</th>
+<th align="center">時序資訊</th>
+<th align="center">應用場景</th>
+<th align="center">準確度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">強化學習</td>
+<td align="center">O</td>
+<td align="center">O</td>
+<td align="center">O</td>
+<td align="center">實際與人交互</td>
+<td align="center">高</td>
+</tr>
+<tr>
+<td align="center">逆向運動學</td>
+<td align="center">X</td>
+<td align="center">X</td>
+<td align="center">X</td>
+<td align="center">機器人快速動作編譯</td>
+<td align="center">較高</td>
+</tr>
+</tbody></table>
+<h3 id="系統評估"><a href="#系統評估" class="headerlink" title="系統評估"></a>系統評估</h3><p>要求一位未曾參與過實驗的受試者根據自身習慣執行6個學習的目標動作，其中每個動作做20次，依據強化式學習的方法對機器人手部做運動重定向，對每個動作的20次數據取平均弗雷歇距離，測試手部系統重定向的穩定度，本系統平均軌跡誤差為2.8公分，在重定向控制上具備很高的穩定度。</p>
+<p><img src="/2022/08/08/skeleton-robot/image-20220619221843377.png" srcset="/img/loading.gif" lazyload alt="系統評估"></p>
+<h3 id="系統整合應用"><a href="#系統整合應用" class="headerlink" title="系統整合應用"></a>系統整合應用</h3><p>設計一應用場景以結合各個系統的控制，場景內容操作者於甲地穿戴慣性感測器、虛擬實境頭戴式裝置與虛擬實境把手，遠程控制乙地之機器人，透過自身姿態控制機器人與機器人端的用戶打招呼，並向機器人端之用戶A拿取餅乾給用戶B，以達成互動的目標。</p>
+<div class="group-image-container"><div class="group-image-row"><div class="group-image-wrap"><img src="/2022/08/08/skeleton-robot/1.png" srcset="/img/loading.gif" lazyload alt="控制機器人行走"></div><div class="group-image-wrap"><img src="/2022/08/08/skeleton-robot/2.png" srcset="/img/loading.gif" lazyload alt="控制機器人轉身面對持有餅乾的用戶A"></div><div class="group-image-wrap"><img src="/2022/08/08/skeleton-robot/3.png" srcset="/img/loading.gif" lazyload alt="向用戶A拿取餅乾"></div></div><div class="group-image-row"><div class="group-image-wrap"><img src="/2022/08/08/skeleton-robot/4.png" srcset="/img/loading.gif" lazyload alt="與用戶A招呼以示謝意"></div><div class="group-image-wrap"><img src="/2022/08/08/skeleton-robot/5.png" srcset="/img/loading.gif" lazyload alt="控制機器人轉身面對並走向用戶B"></div><div class="group-image-wrap"><img src="/2022/08/08/skeleton-robot/6.png" srcset="/img/loading.gif" lazyload alt="將餅乾傳遞給用戶B"></div></div></div>
+
+              
+            </div>
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%A2%A9%E5%A3%AB%E7%A0%94%E7%A9%B6/" class="category-chain-item">碩士研究</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%85%A3%E6%80%A7%E6%84%9F%E6%B8%AC%E5%99%A8/">#慣性感測器</a>
+      
+        <a href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E6%85%A7/">#人工智慧</a>
+      
+        <a href="/tags/%E9%81%8B%E5%8B%95%E9%87%8D%E5%AE%9A%E5%90%91/">#運動重定向</a>
+      
+        <a href="/tags/%E7%B3%BB%E7%B5%B1%E8%A8%AD%E8%A8%88/">#系統設計</a>
+      
+        <a href="/tags/Nao-%E6%A9%9F%E5%99%A8%E4%BA%BA/">#Nao 機器人</a>
+      
+        <a href="/tags/%E5%BC%B7%E5%8C%96%E5%AD%B8%E7%BF%92/">#強化學習</a>
+      
+        <a href="/tags/%E9%80%86%E5%90%91%E9%81%8B%E5%8B%95%E5%AD%B8/">#逆向運動學</a>
+      
+        <a href="/tags/%E7%A2%A9%E5%A3%AB%E8%AB%96%E6%96%87/">#碩士論文</a>
+      
+        <a href="/tags/%E8%99%9B%E6%93%AC%E5%AF%A6%E5%A2%83/">#虛擬實境</a>
+      
+        <a href="/tags/%E9%80%9A%E8%A8%8A%E5%8D%94%E5%AE%9A/">#通訊協定</a>
+      
+    </div>
+  
+</div>
+
+
+              
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/08/08/blindness-detect/" title="Kaggle競賽銀牌-APTOS 2019 Blindness Detection">
+                        <span class="hidden-mobile">Kaggle競賽銀牌-APTOS 2019 Blindness Detection</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜尋</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">關鍵字</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script>
+  (function() {
+    var enableLang = CONFIG.code_language.enable && CONFIG.code_language.default;
+    var enableCopy = CONFIG.copy_btn;
+    if (!enableLang && !enableCopy) {
+      return;
+    }
+
+    function getBgClass(ele) {
+      return Fluid.utils.getBackgroundLightness(ele) >= 0 ? 'code-widget-light' : 'code-widget-dark';
+    }
+
+    var copyTmpl = '';
+    copyTmpl += '<div class="code-widget">';
+    copyTmpl += 'LANG';
+    copyTmpl += '</div>';
+    jQuery('.markdown-body pre').each(function() {
+      var $pre = jQuery(this);
+      if ($pre.find('code.mermaid').length > 0) {
+        return;
+      }
+      if ($pre.find('span.line').length > 0) {
+        return;
+      }
+
+      var lang = '';
+
+      if (enableLang) {
+        lang = CONFIG.code_language.default;
+        if ($pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2 && $pre.children().hasClass('hljs')) {
+          lang = $pre[0].children[0].classList[1];
+        } else if ($pre[0].getAttribute('data-language')) {
+          lang = $pre[0].getAttribute('data-language');
+        } else if ($pre.parent().hasClass('sourceCode') && $pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2) {
+          lang = $pre[0].children[0].classList[1];
+          $pre.parent().addClass('code-wrapper');
+        } else if ($pre.parent().hasClass('markdown-body') && $pre[0].classList.length === 0) {
+          $pre.wrap('<div class="code-wrapper"></div>');
+        }
+        lang = lang.toUpperCase().replace('NONE', CONFIG.code_language.default);
+      }
+      $pre.append(copyTmpl.replace('LANG', lang).replace('code-widget">',
+        getBgClass($pre[0]) + (enableCopy ? ' code-widget copy-btn" data-clipboard-snippet><i class="iconfont icon-copy"></i>' : ' code-widget">')));
+
+      if (enableCopy) {
+        Fluid.utils.createScript('https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js', function() {
+          var clipboard = new window.ClipboardJS('.copy-btn', {
+            target: function(trigger) {
+              var nodes = trigger.parentNode.childNodes;
+              for (var i = 0; i < nodes.length; i++) {
+                if (nodes[i].tagName === 'CODE') {
+                  return nodes[i];
+                }
+              }
+            }
+          });
+          clipboard.on('success', function(e) {
+            e.clearSelection();
+            e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-copy', 'icon-success');
+            setTimeout(function() {
+              e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-success', 'icon-copy');
+            }, 2000);
+          });
+        });
+      }
+    });
+  })();
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允許 JavaScript 運行的環境下瀏覽效果更佳</div>
+  </noscript>
+</body>
+</html>
